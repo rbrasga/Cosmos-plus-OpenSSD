@@ -4,6 +4,9 @@ PROCESSOR = ps7_cortexa9_0
 LIBRARIES = ${PROCESSOR}/lib/libxil.a
 BSP_MAKEFILES := $(wildcard $(PROCESSOR)/libsrc/*/src/Makefile)
 SUBDIRS := $(patsubst %/Makefile, %, $(BSP_MAKEFILES))
+DIRS := . $(shell find $(SUBDIRS) -type d)
+GARBAGE_PATTERNS := *.o *~ core .depend .*.cmd *.ko *.mod.c
+GARBAGE := $(foreach DIR,$(DIRS),$(addprefix $(DIR)/,$(GARBAGE_PATTERNS)))
 
 ifneq (,$(findstring win,$(RDI_PLATFORM)))
  SHELL = CMD
@@ -29,3 +32,4 @@ $(PROCESSOR)/lib/libxil.a: $(PROCESSOR)/lib/libxil_init.a
 
 clean:
 	rm -f ${PROCESSOR}/lib/libxil.a
+	rm -rf $(GARBAGE)
