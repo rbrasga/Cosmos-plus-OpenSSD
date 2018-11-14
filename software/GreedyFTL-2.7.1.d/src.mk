@@ -16,6 +16,9 @@ ELFSIZE :=
 
 # Every subdirectory with source files must be described here
 SUBDIRS := \
-src \
-src/nvme \
+. \
+nvme \
 
+USER_OBJS :=
+
+LIBS := -specs=Xilinx.spec -Wl,--build-id=none -Wl,--start-group,-lgcc,-lxil,-lc,--end-group

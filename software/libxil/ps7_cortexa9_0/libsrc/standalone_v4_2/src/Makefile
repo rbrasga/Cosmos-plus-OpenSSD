@@ -32,9 +32,12 @@
 
 include config.make
 
-AS=arm-eabi-as
-CC=arm-eabi-gcc
-AR=arm-eabi-ar
+#AS=arm-eabi-as
+#CC=arm-eabi-gcc
+#AR=arm-eabi-ar
+AS=arm-none-eabi-as
+CC=arm-none-eabi-gcc
+AR=arm-none-eabi-ar
 CP=cp
 COMPILER_FLAGS=
 EXTRA_COMPILER_FLAGS=

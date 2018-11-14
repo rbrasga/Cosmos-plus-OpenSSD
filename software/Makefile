@@ -1,59 +1,36 @@
-################################################################################
-# Automatically-generated file. Do not edit!
-################################################################################
-
--include ../makefile.init
-
-RM := rm -rf
-
-# All of the sources participating in the build are defined here
--include sources.mk
--include src/nvme/subdir.mk
--include src/subdir.mk
--include subdir.mk
--include objects.mk
-
-ifneq ($(MAKECMDGOALS),clean)
-ifneq ($(strip $(S_UPPER_DEPS)),)
--include $(S_UPPER_DEPS)
-endif
-ifneq ($(strip $(C_DEPS)),)
--include $(C_DEPS)
-endif
-endif
-
--include ../makefile.defs
-
-# Add inputs and outputs from these tool invocations to the build variables 
-ELFSIZE += \
-CosmosPlusFirmware.elf.size \
+#GCC=/opt/Xilinx/SDK/2017.1/gnu/arm/lin/bin/arm-xilinx-eabi-gcc
+#GCC=/usr/gcc-linaro-6.3.1-2017.02-x86_64_arm-eabi/bin/arm-eabi-gcc
+GCC=arm-none-eabi-gcc
+#AR=/opt/Xilinx/SDK/2017.1/gnu/arm/lin/bin/arm-xilinx-eabi-ar
+#AR=/usr/gcc-linaro-6.3.1-2017.02-x86_64_arm-eabi/bin/arm-eabi-ar
+AR=arm-none-eabi-ar
+#SIZE=/opt/Xilinx/SDK/2017.1/gnu/arm/lin/bin/arm-xilinx-eabi-size
+#SIZE=/usr/gcc-linaro-6.3.1-2017.02-x86_64_arm-eabi/bin/arm-eabi-size
+SIZE=arm-none-eabi-size
+#XILINX_LIB=/opt/Xilinx/SDK/2017.1/gnu/arm/lin/arm-xilinx-eabi/lib
+XILINX_LIB=/usr/lib/arm-none-eabi/newlib
+#XILINX_LIB=/usr/gcc-linaro-6.3.1-2017.02-x86_64_arm-eabi/lib/
+#XILINX_LIB=/usr/gcc-linaro-6.3.1-2017.02-x86_64_arm-eabi/arm-eabi/libc/usr/lib
+LIBRARY = libxil.a
 
 
 # All Target
-all: CosmosPlusFirmware.elf secondary-outputs
+all: $(LIBRARY) GreedyFTL270 GreedyFTL271 GreedyFTL300
 
-# Tool invocations
-CosmosPlusFirmware.elf: $(OBJS) ../src/lscript.ld $(USER_OBJS)
-	@echo 'Building target: $@'
-	@echo 'Invoking: ARM gcc linker'
-	arm-eabi-gcc -mcpu=cortex-a9 -mfloat-abi=soft -Wl,-T -Wl,../src/lscript.ld -L../../BSP/ps7_cortexa9_0/lib -L/opt/Xilinx/SDK/2017.1/gnu/arm/lin/arm-xilinx-eabi/lib -o "CosmosPlusFirmware.elf" $(OBJS) $(USER_OBJS) $(LIBS)
-	@echo 'Finished building target: $@'
-	@echo ' '
+$(LIBRARY):
+	cd libxil; GCC=$(GCC) AR=$(AR) $(MAKE)
 
-CosmosPlusFirmware.elf.size: CosmosPlusFirmware.elf
-	@echo 'Invoking: ARM Print Size'
-	arm-eabi-size CosmosPlusFirmware.elf  |tee "CosmosPlusFirmware.elf.size"
-	@echo 'Finished building: $@'
-	@echo ' '
+GreedyFTL270:
+	cd GreedyFTL-2.7.0.d; GCC=$(GCC) SIZE=$(SIZE) XILINX_LIB=$(XILINX_LIB) $(MAKE)
+	
+GreedyFTL271:
+	cd GreedyFTL-2.7.1.d; GCC=$(GCC) SIZE=$(SIZE) XILINX_LIB=$(XILINX_LIB) $(MAKE)
+	
+GreedyFTL300:
+	cd GreedyFTL-3.0.0; GCC=$(GCC) SIZE=$(SIZE) XILINX_LIB=$(XILINX_LIB) $(MAKE)
 
-# Other Targets
 clean:
-	-$(RM) $(EXECUTABLES)$(OBJS)$(S_UPPER_DEPS)$(C_DEPS)$(ELFSIZE) CosmosPlusFirmware.elf
-	-@echo ' '
-
-secondary-outputs: $(ELFSIZE)
-
-.PHONY: all clean dependents
-.SECONDARY:
-
--include ../makefile.targets
+	cd libxil; $(MAKE) clean; cd ..
+	cd GreedyFTL-2.7.0.d; $(MAKE) clean; cd ..
+	cd GreedyFTL-2.7.1.d; $(MAKE) clean; cd ..
+	cd GreedyFTL-3.0.0; $(MAKE) clean; cd ..
